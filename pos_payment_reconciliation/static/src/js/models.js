@@ -7,6 +7,8 @@
 
 function pos_payment_reconciliation_models(instance, module){
 
+    var PosPaymentlineSuper = module.Paymentline;
+
     module.Paymentline = module.Paymentline.extend({
         set_payment_authorization: function(payment_authorization){
             this.payment_authorization = payment_authorization;
@@ -27,9 +29,8 @@ function pos_payment_reconciliation_models(instance, module){
             return this.payment_flag;
         },
 
-
         export_as_JSON: function(){
-            var result = module.Paymentline.prototype.__proto__.export_as_JSON.call(this);
+            var result = PosPaymentlineSuper.prototype.export_as_JSON.call(this);
             result['note'] = this.get_payment_flag() + '/' +this.get_payment_authorization() +'/'+ this.get_payment_doc();
             return result;
         }

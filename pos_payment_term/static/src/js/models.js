@@ -6,6 +6,8 @@
 
 function pos_payment_term_models(instance, module){
 
+    var PosPaymentlineSuper = module.Paymentline;
+
     var PosModelParent = module.PosModel;
     module.PosModel = module.PosModel.extend({
         initialize: function (session, attributes) {
@@ -28,14 +30,9 @@ function pos_payment_term_models(instance, module){
             return this.payment_term;
         },
         export_as_JSON: function(){
-            return {
-                name: instance.web.datetime_to_str(new Date()),
-                statement_id: this.cashregister.id,
-                account_id: this.cashregister.account_id[0],
-                journal_id: this.cashregister.journal_id[0],
-                amount: this.get_amount(),
-                payment_term: this.get_payment_term()
-            };
+            var result = PosPaymentlineSuper.prototype.export_as_JSON.call(this);
+            result['payment_term'] = this.get_payment_term();
+            return result;
         }
     });
 }
