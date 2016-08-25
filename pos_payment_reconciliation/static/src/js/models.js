@@ -9,10 +9,10 @@ function pos_payment_reconciliation_models(instance, module){
 
     module.Paymentline = module.Paymentline.extend({
         set_payment_authorization: function(payment_authorization){
-            this.payment_term = payment_authorization;
+            this.payment_authorization = payment_authorization;
         },
         get_payment_authorization: function(){
-            return this.payment_term;
+            return this.payment_authorization;
         },
         set_payment_doc: function(payment_doc){
             this.payment_doc = payment_doc;
@@ -20,10 +20,17 @@ function pos_payment_reconciliation_models(instance, module){
         get_payment_doc: function(){
             return this.payment_doc;
         },
+        set_payment_flag: function(payment_flag){
+            this.payment_flag = payment_flag;
+        },
+        get_payment_flag: function(){
+            return this.payment_flag;
+        },
+
+
         export_as_JSON: function(){
             var result = module.Paymentline.prototype.__proto__.export_as_JSON.call(this);
-            // result['note'] = this.get_payment_doc() + '/' + this.get_payment_authorization();
-            result['note'] = 'teste/testeDOC';
+            result['note'] = this.get_payment_flag() + '/' +this.get_payment_authorization() +'/'+ this.get_payment_doc();
             return result;
         }
     });
