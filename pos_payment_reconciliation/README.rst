@@ -1,10 +1,10 @@
 .. image:: https://img.shields.io/badge/licence-AGPL--3-blue.svg
     :alt: License: AGPL-3
 
-Payment Term for Odoo Point of Sale
+POS Payment Reconciliation for Odoo Point of Sale
 ====================================
 
-This module allows to select a payment term in pos checkout.
+This module allows relate informations about debit/credit cards transactions.
 
 Installation
 ============
@@ -29,7 +29,7 @@ Contributors
 ------------
 
 * Luiz Felipe do Divino <luiz.divino@kmee.com.br>
-* Luis Felipe Mileo <mileo@kmee.com.br>
+* Hendrix Costa <hendrix.costa@kmee.com.br>
 
 
 Maintainer
