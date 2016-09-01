@@ -4,9 +4,16 @@
 <templates id="template" xml:space="preserve">
     <t t-extend="Paymentline">
         <t t-jquery="span.paymentline-delete" t-operation="after">
-            Autorizaçao: <input class='paymentline-input payment-authorization' />
-            Bandeira: <input class='paymentline-input payment-flag' />
-            DOC: <input class='paymentline-input payment-doc' />
+            <t t-if="line.cashregister.journal.self_checkout_payment_method == true">
+                Bandeira: <input class='paymentline-input payment-flag' />
+                Autorizaçao: <input class='paymentline-input payment-authorization' />
+                DOC: <input class='paymentline-input payment-doc' />
+            </t>
+            <t t-if="!line.cashregister.journal.self_checkout_payment_method">
+                <input type="hidden" class='paymentline-input payment-flag' />
+                <input type="hidden" class='paymentline-input payment-authorization' />
+                <input type="hidden" class='paymentline-input payment-doc' />
+            </t>
         </t>
     </t>
 </templates>
