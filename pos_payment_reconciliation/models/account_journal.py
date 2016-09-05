@@ -3,4 +3,11 @@
 # Luiz Felipe do Divino <luiz.divino@kmee.com.br>
 # License AGPL-3.0 or later (http://www.gnu.org/licenses/agpl.html).
 
-from . import models
+
+from openerp import api, models, fields
+
+
+class AccountJournalPos(models.Model):
+    _inherit = "account.journal"
+
+    pos_payment_card_reconciliation = fields.Boolean("Pos cards reconciliation")
