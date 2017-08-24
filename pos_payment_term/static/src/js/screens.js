@@ -47,8 +47,18 @@ function pos_payment_term_screens(instance, module) {
             this.old_orderlines = orderlines;
         },
         validate_order: function(options) {
+            var self = this;
+            options = options || {};
 
             var currentOrder = this.pos.get('selectedOrder');
+
+            if(currentOrder.get('orderLines').models.length === 0){
+                this.pos_widget.screen_selector.show_popup('error',{
+                    'message': _t('Empty Order'),
+                    'comment': _t('There must be at least one product in your order before it can be validated'),
+                });
+                return;
+            }
 
             var plines = currentOrder.get('paymentLines').models;
             var payment_terms_lines = [];
