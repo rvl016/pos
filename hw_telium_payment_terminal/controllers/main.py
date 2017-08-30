@@ -28,13 +28,19 @@ import curses.ascii
 from threading import Thread, Lock
 from Queue import Queue
 from serial import Serial
-import pycountry
 import openerp.addons.hw_proxy.controllers.main as hw_proxy
 from openerp import http
 from openerp.tools.config import config
 
 
 logger = logging.getLogger(__name__)
+try:
+    import pycountry
+except ImportError:
+    logger.error(
+        'Odoo module hw_telium_payment_terminal '
+        'depends on the pycountry module'
+    )
 
 
 class TeliumPaymentTerminalDriver(Thread):
@@ -268,7 +274,9 @@ class TeliumPaymentTerminalDriver(Thread):
             except Exception as e:
                 self.set_status('error', str(e))
 
+
 driver = TeliumPaymentTerminalDriver()
+
 
 hw_proxy.drivers['telium_payment_terminal'] = driver
 
