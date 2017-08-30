@@ -20,20 +20,23 @@
 #
 ##############################################################################
 
-
 import logging
 import simplejson
 import time
 from threading import Thread, Lock
 from Queue import Queue
-from unidecode import unidecode
 from serial import Serial
 import openerp.addons.hw_proxy.controllers.main as hw_proxy
 from openerp import http
 from openerp.tools.config import config
 
-
 logger = logging.getLogger(__name__)
+try:
+    from unidecode import unidecode
+except ImportError:
+    logger.error(
+        'Odoo module hw_customer_display depends on the unidecode module'
+    )
 
 
 class CustomerDisplayDriver(Thread):
@@ -99,9 +102,9 @@ class CustomerDisplayDriver(Thread):
             self.serial_write(dline)
 
     def setup_customer_display(self):
-        '''Set LCD cursor to off
+        ''' Set LCD cursor to off
         If your LCD has different setup instruction(s), you should
-        inherit this function'''
+        inherit this function '''
         # Bixolon spec : 35. "Set Cursor On/Off"
         self.cmd_serial_write('\x1F\x43\x00')
         logger.debug('LCD cursor set to off')
@@ -124,7 +127,7 @@ class CustomerDisplayDriver(Thread):
         self.serial.write(text)
 
     def send_text_customer_display(self, text_to_display):
-        '''This function sends the data to the serial/usb port.
+        ''' This function sends the data to the serial/usb port.
         We open and close the serial connection on every message display.
         Why ?
         1. Because it is not a problem for the customer display
@@ -164,7 +167,9 @@ class CustomerDisplayDriver(Thread):
             except Exception as e:
                 self.set_status('error', str(e))
 
+
 driver = CustomerDisplayDriver()
+
 
 hw_proxy.drivers['customer_display'] = driver
 
