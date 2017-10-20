@@ -18,8 +18,7 @@
 function pos_pricelist_screens(instance, module) {
 
     module.ClientListScreenWidget = module.ClientListScreenWidget.extend({
-        re_update_products: function(partner) {
-            var currentOrder = this.pos.get('selectedOrder');
+        re_update_products: function(partner, currentOrder) {
             var orderLines = currentOrder.get('orderLines').models;
             this.pos.pricelist_engine.update_products_ui(partner);
             this.pos.pricelist_engine.update_ticket(partner, orderLines);
@@ -27,8 +26,9 @@ function pos_pricelist_screens(instance, module) {
         save_changes: function () {
             this._super();
             if (this.has_client_changed()) {
+                var currentOrder = this.pos.get('selectedOrder');
                 var partner = currentOrder.get_client();
-                this.re_update_products(partner);
+                this.re_update_products(partner, currentOrder);
             }
         }
     });
