@@ -367,6 +367,7 @@ function pos_pricelist_models(instance, module) {
          */
         find_valid_pricelist_version: function (db, pricelist_id) {
             var date = new Date();
+            date.setHours(0,0,0,0);
             var version = false;
             var pricelist = db.pricelist_by_id[pricelist_id];
             for (var i = 0, len = pricelist.version_id.length; i < len; i++) {
