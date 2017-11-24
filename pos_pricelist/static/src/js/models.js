@@ -372,7 +372,7 @@ function pos_pricelist_models(instance, module) {
             var pricelist = db.pricelist_by_id[pricelist_id];
             for (var i = 0, len = pricelist.version_id.length; i < len; i++) {
                 var v = db.pricelist_version_by_id[pricelist.version_id[i]];
-                if (((v.date_start == false)
+                if (v && ((v.date_start == false)
                     || (new Date(v.date_start) <= date)) &&
                     ((v.date_end == false)
                     || (new Date(v.date_end) >= date))) {
@@ -404,9 +404,12 @@ function pos_pricelist_models(instance, module) {
             // get a valid version
             var version = this.find_valid_pricelist_version(db, pricelist_id);
             if (version == false) {
+                var pricelist = database.pricelist_by_id[pricelist_id];
                 var message = _t('Pricelist Error');
-                var comment = _t('At least one pricelist has no active ' +
-                    'version ! Please create or activate one.');
+                var comment = _.str.sprintf(_t(
+                    `Pricelist "%s" (id=%s) has no valid active version!\n` +
+                    'Please create or activate one.'
+                ), pricelist.display_name, pricelist_id);
                 show_error(this, message, comment);
                 return false;
             }
@@ -650,10 +653,8 @@ function pos_pricelist_models(instance, module) {
      * @param comment
      */
     function show_error(context, message, comment) {
-        context.pos.pos_widget.screen_selector.show_popup('error', {
-            'message': message,
-            'comment': comment
-        });
+        // context.pos.pos_widget.screen_selector.show_popup() might not be available:
+        alert(message + '\n' + comment);
     }
 
     /**
@@ -752,7 +753,7 @@ function pos_pricelist_models(instance, module) {
                         'pricelist_id',
                         'date_start',
                         'date_end',
-                        'items'],
+                    ],
                     domain: null,
                     loaded: function (self, versions) {
                         self.db.add_pricelist_versions(versions);
