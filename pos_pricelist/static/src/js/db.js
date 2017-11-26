@@ -71,6 +71,14 @@ function pos_pricelist_db(instance, module) {
                 this.pricelist_by_id[pricelist.id] = pricelist;
             }
         },
+        remove_pricelists: function remove_pricelists(pricelists) {
+            if (!(pricelists instanceof Array)) {
+                pricelists = [pricelists];
+            }
+            pricelists.forEach(pricelist => {
+                delete this.pricelist_by_id[pricelist.id];
+            });
+        },
         add_pricelist_versions: function (versions) {
             if (!(versions instanceof Array)) {
                 versions = [versions];
