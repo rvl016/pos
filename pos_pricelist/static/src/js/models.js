@@ -776,7 +776,14 @@ function pos_pricelist_models(instance, module) {
                         'product_tmpl_id',
                         'sequence'
                     ],
-                    domain: null,
+                    domain: function(self, tmp) {
+                        var pricelist_version_ids = Object.values(self.db.pricelist_version_by_id).map(
+                            function(version) {
+                                return version.id;
+                            }
+                        );
+                        return [['price_version_id', 'in', pricelist_version_ids]];
+                    },
                     loaded: function (self, items) {
                         self.db.add_pricelist_items(items);
                     }
