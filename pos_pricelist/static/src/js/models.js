@@ -754,7 +754,16 @@ function pos_pricelist_models(instance, module) {
                         'date_start',
                         'date_end',
                     ],
-                    domain: null,
+                    domain: function(self, tmp) {
+                        var pricelist_ids = Object.values(self.db.pricelist_by_id).map(
+                            function(pricelist) {
+                                return pricelist.id;
+                            }
+                        );
+                        return [
+                            ['pricelist_id', 'in', pricelist_ids]
+                        ];
+                    },
                     loaded: function (self, versions) {
                         self.db.add_pricelist_versions(versions);
                     }
