@@ -766,6 +766,23 @@ function pos_pricelist_models(instance, module) {
                     },
                     loaded: function (self, versions) {
                         self.db.add_pricelist_versions(versions);
+
+                        var engine = self.pricelist_engine;
+                        var invalid_pricelists = Object.values(self.db.pricelist_by_id).filter(
+                            function(pricelist) {
+                                return !engine.find_valid_pricelist_version(self.db, pricelist.id);
+                            }
+                        );
+                        if (invalid_pricelists.length) {
+                            var message = _t('Invalid Pricelists');
+                            var comment = _t(
+                                'The pricelists below have no valid versions and will be ignored:'
+                            ) + '\n\n' + invalid_pricelists.map(function(pricelist) {
+                                return `  - "${pricelist.display_name}" (id=${pricelist.id})`
+                            }).join('\n');
+                            show_error(this, message, comment);
+                            self.db.remove_pricelists(invalid_pricelists);
+                        }
                     }
                 },
                 {
