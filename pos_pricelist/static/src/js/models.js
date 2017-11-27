@@ -760,8 +760,16 @@ function pos_pricelist_models(instance, module) {
                                 return pricelist.id;
                             }
                         );
+                        var date = new Date().toISOString().split('T')[0];
+
                         return [
                             ['pricelist_id', 'in', pricelist_ids]
+                            ,'|',
+                                ['date_start', '<=', date],
+                                ['date_start', '=', null]
+                            ,'|',
+                                ['date_end', '>=', date],
+                                ['date_end', '=', null]
                         ];
                     },
                     loaded: function (self, versions) {
