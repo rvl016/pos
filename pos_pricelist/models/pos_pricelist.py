@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ##############################################################################
-from openerp import models, fields
+from openerp import models, fields, api
 
 
 class PosPriceListConfig(models.Model):
@@ -26,3 +26,35 @@ class PosPriceListConfig(models.Model):
         string='Price With Taxes',
         help="Display Prices with taxes on POS"
     )
+
+    referenced_pricelist_ids = fields.One2many(
+        string="Referenced Pricelists",
+        help=' '.join("""
+Pricelistst that are referenced directly by this point of sale or indirectly by
+pricelists items in pricelists referenced by this point of sale.
+""".strip().split('\n')),
+        comodel_name="product.pricelist",
+        compute='_referenced_pricelist_ids_compute',
+    )
+
+    @api.depends('pricelist_id', 'pricelist_id.version_id',
+                 'pricelist_id.version_id.items_id')
+    @api.one
+    def _referenced_pricelist_ids_compute(self):
+        remaining = pricelists = self.pricelist_id
+        items = self.env['product.pricelist.item']
+        while remaining:
+            pricelist = remaining[0]
+            remaining -= pricelist
+            items = items.search([
+                ('price_version_id.active', '=', True),
+                ('price_version_id.pricelist_id', '=', pricelist.id),
+                ('base_pricelist_id', '!=', None),
+            ])
+            new_pricelists = (
+                items.mapped('base_pricelist_id') - pricelists
+            )
+            remaining |= new_pricelists
+            pricelists |= new_pricelists
+
+        self.referenced_pricelist_ids = pricelists
