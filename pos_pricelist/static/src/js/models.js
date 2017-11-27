@@ -738,9 +738,9 @@ function pos_pricelist_models(instance, module) {
                         'name',
                         'version_id',
                         'currency_id'],
-                    domain: function () {
+                    domain: function (self, tmp) {
                         return [
-                            ['type', '=', 'sale']
+                            ['id', 'in', self.config.referenced_pricelist_ids]
                         ]
                     },
                     loaded: function (self, pricelists) {
