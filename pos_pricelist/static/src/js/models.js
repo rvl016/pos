@@ -382,6 +382,16 @@ function pos_pricelist_models(instance, module) {
             }
             return version;
         },
+        round_price_pricelist_round_rule: function (price, price_round) {
+            var modulus_left_over = price % price_round;
+            if (price_round/2 >= modulus_left_over){
+                price = price - modulus_left_over;
+            } else {
+                price = price + (price_round - modulus_left_over)
+            }
+
+            return price;
+        },
         /**
          * compute the price for the given product
          * @param database
@@ -528,10 +538,7 @@ function pos_pricelist_models(instance, module) {
                             ? rule['price_discount']
                             : 0.0));
                     if (rule['price_round']) {
-                        price = parseFloat(price.toFixed(
-                                Math.ceil(Math.log(1.0 / rule['price_round'])
-                                    / Math.log(10)))
-                        );
+                        price = self.round_price_pricelist_round_rule(price, rule['price_round']);
                     }
                     price += (rule['price_surcharge']
                         ? rule['price_surcharge']
