@@ -7,7 +7,7 @@ odoo.define("pos_pouchdb.db", function (require) {
         init: function (options) {
             this._super.apply(this, arguments);
             this.p_db = {};
-            this.pouch_db = new PouchDB('http://admin:admin@localhost:5984/unpaid_orders');
+            this.pouch_db = new PouchDB('localDB');
         },
 
         save_unpaid_order: function (order) {
