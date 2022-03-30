@@ -14,19 +14,21 @@ odoo.define("pos_pouchdb.db", function (require) {
             var self = this;
             try {
                 var serialized = order.export_as_JSON();
-                self.pouch_db.info().then(function (info) {
-                    console.log(info);
-                });
-                self.pouch_db.get(serialized._id).then(function(doc) {
-                    serialized._rev = doc._rev
-                    self.pouch_db.put(serialized).then(function(doc){
-                        return serialized.uid;
-                    });
-                }).catch(function (err) {
-                    self.pouch_db.put(serialized).then(function(doc){
-                        return serialized.uid;
-                    });
-                });
+                // self.pouch_db.info().then(function (info) {
+                //     console.log(info);
+                // });
+                // self.pouch_db.get(serialized._id).then(function(doc) {
+                //     serialized._rev = doc._rev
+                //     self.pouch_db.put(serialized).then(function(doc){
+                //         return serialized.uid;
+                //     });
+                // }).catch(function (err) {
+                //     console.log(err);
+                //     self.pouch_db.put(serialized).then(function(doc){
+                //         return serialized.uid;
+                //     });
+                // });
+                self.pouch_db.upsert(serialized._id, function () { return serialized; });
             } catch (e) {
                 return this._super.apply(this, arguments);
             }

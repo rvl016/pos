@@ -4,6 +4,7 @@
     <template id="assets" inherit_id="point_of_sale.assets">
         <xpath expr="." position="inside">
             <script type="text/javascript" src="/pos_pouchdb/static/lib/pouchdb-7.2.1.min.js"/>
+            <script type="text/javascript" src="/pos_pouchdb/static/lib/pouchdb.upsert.min.js"/>
             <script type="text/javascript" src="/pos_pouchdb/static/lib/backbone-pouch.js"/>
             <script type="text/javascript" src="/pos_pouchdb/static/src/js/custom.js"/>
         </xpath>
