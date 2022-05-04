@@ -25,14 +25,6 @@ models.load_models({
         }
     });
 
-models.load_models({
-    model:  'pos.order.line',
-    fields: ['product_id', 'qty', 'discount','price_subtotal_incl'],
-    loaded: function(self, order_lines){
-        self.order_lines = order_lines;
-        }
-    });
-
 var PosOrderScreenWidget = ScreenWidget.extend({
     template: 'PosOrderScreenWidget',
     back_screen:   'product',
