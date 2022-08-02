@@ -21,7 +21,12 @@ This module adds a custom Sales Team for the point of sale to be able to view an
         
         'views/sales_team_views.xml',
         'views/pos_config_views.xml',
+        'views/pos_order_views.xml',
+        'views/sale_order_views.xml',
+        'views/stock_template.xml',
+        'views/pos_assets.xml',
     ],
+    'qweb': ['static/src/xml/template.xml',],
     'installable': True,
     'auto_install': True,
     'license': 'LGPL-3',
