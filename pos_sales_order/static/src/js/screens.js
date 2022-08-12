@@ -310,10 +310,10 @@ odoo.define("pos_sale_backport.screens", function (require) {
                             });
                         }
                     }
+                    this.pos.get_order().add_orderline(newLine);
                     newLine.setQuantityFromSOL(line);
                     newLine.set_unit_price(line.price_unit);
                     newLine.set_discount(line.discount);
-                    this.pos.get_order().add_orderline(newLine);
                 }
                 this.pos.gui.back();
             } else {
