@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates id="template" xml:space="preserve">
+
+    <t t-name="SaleOrderButton">
+        <div class="control-button hold-button">
+            Quotation/Order
+        </div>
+    </t>
+
+    <t t-name='SaleOrderManagementScreen'>
+        <div class="order-management-screen screen">
+            <div class="screen-full-width">
+                <div class="rightpane">
+                    <div class="flex-container">
+                        <class class="control-panel">
+                            <div class="item button back close-screen">
+                                <i class="fa fa-angle-double-left"></i>
+                                <span> Back </span>
+                            </div>
+                            <div class="item search-box search-order">
+                                <span class="icon">
+                                    <i class="fa fa-search" />
+                                </span>
+                                <input type='text' placeholder="E.g. order: SO001" id="search-order-input"/>
+                                <class class="refresh">
+                                    <i class="fa fa-refresh" />
+                                </class>
+                            </div>
+                        </class>
+
+                        <div class="ordersList">
+                            <div class="header-row">
+                                <div class="col name">Order</div>
+                                <div class="col date">Date</div>
+                                <div class="col customer">Customer</div>
+                                <div class="col salesman">Salesman</div>
+                                <div class="col end total">Total</div>
+                                <div class="col state">State</div>
+                            </div>
+                            <div class="order-list">
+                                <t t-foreach='widget.ordersToShow' t-as='order'>
+                                    <div class="order-row click-sale-order" t-att-data-item-index="order_index">
+                                        <div class="col name">
+                                            <div> <t t-esc='widget.getName(order)' /></div>
+                                        </div>
+                                        <div class="col date">
+                                            <div> <t t-esc='widget.getDate(order)' /></div>
+                                        </div>
+                                        <div class="col customer">
+                                            <div> <t t-esc='widget.getCustomer(order)' /></div>
+                                        </div>
+                                        <div class="col salesman">
+                                            <div> <t t-esc='widget.getSalesman(order)' /></div>
+                                        </div>
+                                        <div class="col end total">
+                                            <div> <t t-esc='widget.getAmountTotal(order)' /></div>
+                                        </div>
+                                        <div class="col state">
+                                            <div> <t t-esc='widget.getOrderState(order)' /></div>
+                                        </div>
+                                    </div>
+                                </t>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </t>
+
+</templates>
