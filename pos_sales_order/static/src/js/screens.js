@@ -555,4 +555,9 @@ odoo.define("pos_sale_backport.screens", function (require) {
         name: "sale_order_button",
         widget: SaleOrderButton,
     });
+
+    return {
+        SaleOrderManagementScreen: SaleOrderManagementScreen,
+        SaleOrderButton: SaleOrderButton,
+    }
 });
