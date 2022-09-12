@@ -161,7 +161,8 @@ odoo.define("pos_sale_backport.screens", function (require) {
                         { id: "1", label: _t("Settle the order"), item: true },
                     ],
                     confirm: (selectedItem) => {
-                        this._importSaleOrder(selectedOrder, selectedItem);
+                        let currentPOSOrder = this.pos.get_order();
+                        this._importSaleOrder(currentPOSOrder, selectedOrder, selectedItem);
                     },
                 });
             } else {
@@ -174,8 +175,7 @@ odoo.define("pos_sale_backport.screens", function (require) {
             }
         },
 
-        _importSaleOrder: async function (selectedOrder, selectedOption) {
-            let currentPOSOrder = this.pos.get_order();
+        _importSaleOrder: async function (currentPOSOrder, selectedOrder, selectedOption) {
             let saleOrder = await this._getSaleOrder(selectedOrder.id);
             try {
                 await this.load_new_partners();
@@ -271,7 +271,7 @@ odoo.define("pos_sale_backport.screens", function (require) {
                         {},
                         {
                             pos: this.pos,
-                            order: this.pos.get_order(),
+                            order: currentPOSOrder,
                             product: this.pos.db.get_product_by_id(
                                 line.product_id[0]
                             ),
@@ -310,12 +310,12 @@ odoo.define("pos_sale_backport.screens", function (require) {
                             });
                         }
                     }
-                    this.pos.get_order().add_orderline(newLine);
+                    currentPOSOrder.add_orderline(newLine);
                     newLine.setQuantityFromSOL(line);
                     newLine.set_unit_price(line.price_unit);
                     newLine.set_discount(line.discount);
                 }
-                this.pos.gui.back();
+                // this.pos.gui.back();
             } else {
                 // apply a downpayment
                 if (this.pos.config.down_payment_product_id) {
@@ -362,7 +362,7 @@ odoo.define("pos_sale_backport.screens", function (require) {
                         {},
                         {
                             pos: this.pos,
-                            order: this.pos.get_order(),
+                            order: currentPOSOrder,
                             product: down_payment_product,
                             price: down_payment,
                             price_manually_set: true,
@@ -371,7 +371,7 @@ odoo.define("pos_sale_backport.screens", function (require) {
                         }
                     );
                     newLine.set_unit_price(down_payment);
-                    this.pos.get_order().add_orderline(newLine);
+                    currentPOSOrder.add_orderline(newLine);
                     this.pos.gui.back();
                 } else {
                     await this.pos.gui.show_popup("error", {
@@ -555,4 +555,9 @@ odoo.define("pos_sale_backport.screens", function (require) {
         name: "sale_order_button",
         widget: SaleOrderButton,
     });
+
+    return {
+        SaleOrderManagementScreen: SaleOrderManagementScreen,
+        SaleOrderButton: SaleOrderButton,
+    }
 });
